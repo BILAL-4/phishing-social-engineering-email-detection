@@ -43,7 +43,7 @@
         @media(max-width:600px){body{padding:10px}.container{padding:24px}.heading{align-items:center}.mark{width:42px;height:42px}.status{display:none}}
     </style>
 </head>
-<body data-prediction="{{ prediction | e }}">
+<body>
 <main class="console">
     <div class="console-bar"><div class="lights"><i></i><i></i><i></i></div><div class="status">SCAN ENGINE ONLINE</div></div>
     <div id="detection-section" class="container detection-mode">
@@ -58,22 +58,41 @@
             </div>
             <button type="submit">Run threat analysis</button>
         </form>
-        {% if error %}
-        <div class="result spam">{{ error }}</div>
-        {% endif %}
         <div id="prediction-result"></div>
         <footer><span>MODEL: NAIVE-BAYES</span><span>PHISHGUARD / 01</span></footer>
     </div>
 </main>
 <script>
-    const prediction = document.body.dataset.prediction || "";
-    if (prediction) {
-        const isSpam = prediction.toLowerCase().includes("spam");
-        const result = document.createElement("div");
-        result.className = "result " + (isSpam ? "spam" : "ham");
-        result.textContent = (isSpam ? "\u26A0 Threat detected / " : "\u2713 Payload verified / ") + prediction;
-        document.getElementById("prediction-result").appendChild(result);
-    }
+    const form = document.querySelector("form");
+    const resultPanel = document.getElementById("prediction-result");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        resultPanel.innerHTML = "";
+
+        try {
+            const response = await fetch("/", {
+                method: "POST",
+                body: new FormData(form)
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Analysis request failed.");
+            }
+
+            const isSpam = data.prediction.toLower?.().includes("spam");
+            const result = document.createElement("div");
+            result.className = "result " + (isSpam ? "spam" : "ham");
+            result.textContent = (isSpam ? "\u26A0 Threat detected / " : "\u2713 Payload verified / ") + data.prediction;
+            resultPanel.appendChild(result);
+        } catch (error) {
+            const result = document.createElement("div");
+            result.className = "result spam";
+            result.textContent = "\u26A0 " + error.message;
+            resultPanel.appendChild(result);
+        }
+    });
 </script>
 </body>
 </html>
