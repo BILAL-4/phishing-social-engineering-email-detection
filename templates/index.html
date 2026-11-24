@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard | Social Engineering Detection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root { --cyan:#5eead4; --red:#fb7185; --green:#34d399; --ink:#060912; }
+        * { box-sizing:border-box; }
+        body {
+            min-height:100vh; margin:0; display:flex; align-items:flex-start; justify-content:center; padding:24px;
+            color:#edf5ff; font-family:'Manrope',sans-serif;
+            background:radial-gradient(circle at 15% 15%,rgba(94,234,212,.10),transparent 24rem),radial-gradient(circle at 88% 82%,rgba(129,140,248,.12),transparent 26rem),linear-gradient(145deg,#050711,#0a1020);
+        }
+        body::before { content:""; position:fixed; inset:0; pointer-events:none; background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px); background-size:40px 40px; mask-image:radial-gradient(circle at center,black,transparent 78%); }
+        .console { width:min(760px,100%); margin:0 auto; position:relative; z-index:1; }
+        .console-bar { height:42px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; border:1px solid rgba(255,255,255,.08); border-bottom:0; border-radius:16px 16px 0 0; background:rgba(10,16,32,.92); }
+        .lights { display:flex; gap:7px; }
+        .lights i { width:8px;height:8px;border-radius:50%;background:#334155}
+        .lights i:first-child { background:var(--red); }.lights i:nth-child(2){background:#fbbf24}.lights i:last-child{background:var(--green)}
+        .status { color:#77869f; font:.68rem 'JetBrains Mono'; letter-spacing:.08em; }
+        .status::before { content:""; display:inline-block;width:6px;height:6px;margin-right:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green); }
+        .container { width:100%; max-width:none; padding:38px; border:1px solid rgba(255,255,255,.09); border-radius:0 0 20px 20px; background:linear-gradient(145deg,rgba(16,24,45,.95),rgba(7,11,24,.96)); box-shadow:0 30px 90px rgba(0,0,0,.42); }
+        .heading { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; }
+        .mark { width:48px;height:48px;display:grid;place-items:center;border:1px solid rgba(94,234,212,.28);border-radius:14px;color:var(--cyan);background:rgba(94,234,212,.05);box-shadow:0 0 30px rgba(94,234,212,.07); }
+        h1 { margin:0 0 6px; font-size:clamp(1.8rem,5vw,3.2rem); letter-spacing:-.055em; }
+        h1 span { color:var(--cyan); }
+        .subtitle { margin:0; color:#8796ad; }
+        .input-group { margin:28px 0 16px; }
+        label { display:block; margin-bottom:9px; color:#7f90a8; font-size:.72rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+        textarea { width:100%; min-height:220px; resize:vertical; padding:18px; border:1px solid rgba(255,255,255,.09); border-radius:14px; background:rgba(2,6,18,.72); color:#eaf1ff; outline:none; font:500 .92rem 'JetBrains Mono'; line-height:1.65; }
+        textarea:focus { border-color:rgba(94,234,212,.48); box-shadow:0 0 0 4px rgba(94,234,212,.07); }
+        textarea::placeholder { color:#536178; }
+        button { width:100%; height:54px; border:0; border-radius:13px; color:#061511; background:linear-gradient(135deg,var(--cyan),#86efac); font-weight:800; cursor:pointer; box-shadow:0 12px 32px rgba(94,234,212,.10); }
+        button:hover { transform:translateY(-2px); }
+        .result { margin-top:18px; padding:16px 18px; border-radius:12px; font:700 .78rem 'JetBrains Mono'; text-transform:uppercase; letter-spacing:.08em; animation:rise .35s ease; }
+        .spam { background:rgba(251,113,133,.08);color:var(--red);border:1px solid rgba(251,113,133,.38); }
+        .ham { background:rgba(52,211,153,.08);color:var(--green);border:1px solid rgba(52,211,153,.38); }
+        footer { display:flex; justify-content:space-between; margin-top:24px; padding-top:16px; border-top:1px solid rgba(255,255,255,.06); color:#697890; font:.68rem 'JetBrains Mono'; }
+        @keyframes rise { from { opacity:0;transform:translateY(8px)} to {opacity:1;transform:none}}
+        @media(max-width:600px){body{padding:10px}.container{padding:24px}.heading{align-items:center}.mark{width:42px;height:42px}.status{display:none}}
+    </style>
+</head>
+<body data-prediction="{{ prediction | e }}">
+<main class="console">
+    <div class="console-bar"><div class="lights"><i></i><i></i><i></i></div><div class="status">SCAN ENGINE ONLINE</div></div>
+    <div id="detection-section" class="container detection-mode">
+        <div class="heading">
+            <div><h1>Phish<span>Guard</span></h1><p class="subtitle">Social engineering email intelligence terminal</p></div>
+            <div class="mark">&#9889;</div>
+        </div>
+        <form method="POST" action="/">
+            <div class="input-group">
+                <label for="email">Message payload</label>
+                <textarea id="email" name="email" placeholder="Paste email headers or message body..." required></textarea>
+            </div>
+            <button type="submit">Run threat analysis</button>
+        </form>
+        {% if error %}
+        <div class="result spam">{{ error }}</div>
+        {% endif %}
+        <div id="prediction-result"></div>
+        <footer><span>MODEL: NAIVE-BAYES</span><span>PHISHGUARD / 01</span></footer>
+    </div>
+</main>
+<script>
+    const prediction = document.body.dataset.prediction || "";
+    if (prediction) {
+        const isSpam = prediction.toLowerCase().includes("spam");
+        const result = document.createElement("div");
+        result.className = "result " + (isSpam ? "spam" : "ham");
+        result.textContent = (isSpam ? "\u26A0 Threat detected / " : "\u2713 Payload verified / ") + prediction;
+        document.getElementById("prediction-result").appendChild(result);
+    }
+</script>
+</body>
+</html>
