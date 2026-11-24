@@ -1,42 +1,127 @@
-# Phishing & Social Engineering Email Detection
+# PhishGuard
 
-A cybersecurity-focused email classification system designed to identify
-phishing, impersonation, and social-engineering attempts rather than
-treating spam detection as a purely lexical text-filtering task.
+**PhishGuard** is a local phishing and social-engineering email analysis console built with Python, Flask, and scikit-learn. It inspects email text and security-related metadata, extracts authentication and URL features, and classifies suspicious messages with a Naive Bayes model.
 
-## Security features
+## 
 
-- Inspects SPF, DKIM, and DMARC authentication outcomes and missing-header cases.
-- Extracts URL count, suspicious URL structure, and obfuscated URL indicators.
-- Measures phishing language and urgency indicators.
-- Uses a reproducible preprocessing and feature pipeline for both training and inference.
-- Includes adversarial-evasion evaluation scenarios for character insertion,
-  obfuscated URL syntax, and removed authentication evidence.
+### 1. Threat Analysis Console
 
-## Run locally
+
+- **Description:** Provides a focused interface for submitting raw email headers or message bodies and displaying whether the payload is likely to be phishing or legitimate email.
+
+
+> **Screenshot placeholder:** Add a screenshot here after training and starting the application.
+
+
+### 2. Email Security Feature Extraction
+
+
+- **Description:** Extracts SPF, DKIM, and DMARC outcomes, missing authentication headers, suspicious URL patterns, urgency language, and obfuscated URL indicators.
+
+
+### 3. Adversarial Evaluation Module
+
+
+- **Description:** Re-evaluates the classifier under character insertion, obfuscated URL, and missing-authentication scenarios to measure resistance to common evasions.
+
+
+### 4. Model Training Pipeline
+
+
+- **Description:** Loads the source dataset, removes duplicates, preprocesses text, creates a stratified train/test split, trains a Naive Bayes classifier, and exports reusable model artifacts.
+
+
+## ✨ Core Features
+
+
+- **Authentication Header Analysis:** Flags missing or failed SPF, DKIM, and DMARC evidence.
+- **URL Inspection:** Detects suspicious, obfuscated, and unusually structured links.
+- **Social-Engineering Indicators:** Measures urgency and phishing language such as account verification, password reset, or payment threats.
+- **Train/Test Separation:** Uses a reproducible, stratified split for model evaluation.
+- **Adversarial Testing:** Measures classifier behavior under three phishing-evasion scenarios.
+- **Local Flask Interface:** Runs entirely locally for private email analysis.
+
+
+## 📋 Prerequisites
+
+
+Before setting up **PhishGuard**, make sure you have:
+
+- **Python:** 3.10 or higher
+- **Pip:** Available in your Python environment
+- **Dataset:** A two-column CSV containing email text and a binary label
+
+
+## 🛠️ Installation & Setup
+
+
+### Step 1: Clone the Repository
+
+
+```bash
+git clone https://github.com/BILAL-4/phishing-social-engineering-email-detection.git
+cd phishing-social-engineering-email-detection
+```
+
+
+### Step 2: Create a Virtual Environment
+
 
 ```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1
+```
+
+
+### Step 3: Install Dependencies
+
+
+```bash
 pip install -r requirements.txt
 python train_model.py
+```
+
+The training script creates `model.pkl` and `vectorizer.pkl` locally. These generated model artifacts are intentionally excluded from Git.
+
+
+### Step 4: Start the Application
+
+
+```bash
 python app.py
 ```
 
-Open `http://127.0.0.1:5000`.
 
-## Evaluation
+### Step 5: Analyze an Email
 
-```powershell
+
+Open `http://127.0.0.1:5000`, paste the email headers or body, and run the threat analysis.
+
+
+### Optional: Run Adversarial Evaluation
+
+
+```bash
 python evaluate_adversarial.py
 ```
 
-The adversarial script reports precision, recall, F1-score, and support for
-plain and evasion-modified samples. Use it to document model degradation and
-driven remediation work.
 
-## Dataset and ethics
+## 📊 Evaluation
 
-`emails.csv` may contain real-world email content. Publish or redistribute it
-only according to the original dataset license, and remove sensitive or
-personally identifiable content when preparing a public demo.
+
+The repository is designed to report accuracy, precision, recall, F1-score, and confusion-matrix results. The adversarial module also separates plain, character-inserted, obfuscated-URL, and missing-authentication scenarios.
+
+
+## ⚠️ Dataset and Responsible Use
+
+
+The public repository does not include `emails.csv` or generated model artifacts. Add only datasets you are licensed to distribute and remove sensitive or personally identifiable email content.
+
+
+## 👨‍💻 Author
+
+
+**Muhammad Bilal**
+
+- BS Cyber Security Undergraduate
+- Specializing in AI security, phishing detection, and defensive security engineering.
