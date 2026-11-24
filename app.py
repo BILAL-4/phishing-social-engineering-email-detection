@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import pickle
 import re
 import nltk
@@ -40,27 +40,21 @@ def preprocess_text(text):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    prediction = ""
-    error = ""
+    if request.method == "GET":
+        return render_template("index.html")
 
-    if request.method == "POST":
-        if model is None or vectorizer is None:
-            error = "Model artifacts are absent. Run train_model.py before starting the app."
-            return render_template("index.html", prediction=prediction, error=error)
-        email_text = request.form["email"]
+    if model is None or vectorizer is None:
+        return jsonify(error="Model artifacts are absent. Run train_model.py before starting the app."), 503
 
-        # Convert text to vector
-        data = vectorizer.transform([preprocess_text(email_text)])
+    email_text = request.form.get("email", "").strip()
+    if not email_text:
+        return jsonify(error="Paste email headers or message body before analysis."), 400
 
-        # Predict
-        result = model.predict(data)[0]
+    data = vectorizer.transform([preprocess_text(email_text)])
+    result = model.predict(data)[0]
+    prediction = "Spam Email" if result == 1 else "Not Spam (Ham)"
 
-        if result == 1:
-            prediction = "Spam Email"
-        else:
-            prediction = "Not Spam (Ham)"
-
-    return render_template("index.html", prediction=prediction)
+    return jsonify(prediction=prediction)
 
 if __name__ == "__main__":
     app.run(debug=False, host="127.0.0.1", port=5000)
