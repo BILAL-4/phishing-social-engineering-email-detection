@@ -10,7 +10,8 @@
 - **Description:** Provides a focused interface for submitting raw email headers or message bodies and displaying whether the payload is likely to be phishing or legitimate email.
 
 
-<img width="877" height="710" alt="image" src="https://github.com/user-attachments/assets/5020f1ae-0cab-47e6-ba29-96d5d99e497e" />
+<img width="1822" height="872" alt="image" src="https://github.com/user-attachments/assets/636edabb-00ea-46b7-8fe3-1896cddf2c58" />
+
 
 
 
