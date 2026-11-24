@@ -33,7 +33,7 @@
 - **Description:** Loads the source dataset, removes duplicates, preprocesses text, creates a stratified train/test split, trains a Naive Bayes classifier, and exports reusable model artifacts.
 
 
-## ✨ Core Features
+##  Core Features
 
 
 - **Authentication Header Analysis:** Flags missing or failed SPF, DKIM, and DMARC evidence.
@@ -44,7 +44,7 @@
 - **Local Flask Interface:** Runs entirely locally for private email analysis.
 
 
-## 📋 Prerequisites
+##  Prerequisites
 
 
 Before setting up **PhishGuard**, make sure you have:
@@ -54,7 +54,7 @@ Before setting up **PhishGuard**, make sure you have:
 - **Dataset:** A two-column CSV containing email text and a binary label
 
 
-## 🛠️ Installation & Setup
+##  Installation & Setup
 
 
 ### Step 1: Clone the Repository
@@ -108,22 +108,22 @@ python evaluate_adversarial.py
 ```
 
 
-## 📊 Evaluation
+##  Evaluation
 
 
 The repository is designed to report accuracy, precision, recall, F1-score, and confusion-matrix results. The adversarial module also separates plain, character-inserted, obfuscated-URL, and missing-authentication scenarios.
 
 
-## ⚠️ Dataset and Responsible Use
+##  Dataset and Responsible Use
 
 
 The public repository does not include `emails.csv` or generated model artifacts. Add only datasets you are licensed to distribute and remove sensitive or personally identifiable email content.
 
 
-## 👨‍💻 Author
+##  Author
 
 
 **Muhammad Bilal**
 
 - BS Cyber Security Undergraduate
-- Specializing in AI security, phishing detection, and defensive security engineering.
+
